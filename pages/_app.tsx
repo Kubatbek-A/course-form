@@ -7,6 +7,7 @@ import {
 import { GlobalStyles } from "@/helpers/styles/globalStyles";
 import HydrationRenderChecker from "@/hooks/useIsHydrationRender/HydrationRenderChecker";
 import { useState } from "react";
+import ToastsProvider from "@/contexts/ToastsContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
@@ -31,8 +32,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <HydrationRenderChecker></HydrationRenderChecker>
       <QueryClientProvider client={queryClient}>
         <HydrationBoundary state={pageProps.dehydratedState}>
-          <GlobalStyles />
-          <Component {...pageProps} />
+          <ToastsProvider>
+            <GlobalStyles />
+            <Component {...pageProps} />
+          </ToastsProvider>
         </HydrationBoundary>
       </QueryClientProvider>
     </>

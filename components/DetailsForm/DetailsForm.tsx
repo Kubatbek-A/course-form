@@ -6,6 +6,7 @@ import Input from "@/UI/Input/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import styled from "styled-components";
 import { useCreateUser } from "@/hooks/useCreateUser";
+import { useRouter } from "next/router";
 
 const DetailsFormWrapper = styled.div``;
 
@@ -38,7 +39,12 @@ const schema = yup.object({
 });
 
 export default function DetailsForm() {
-  const { mutate: createUser } = useCreateUser();
+  const onSuccess = () => {
+    router.push("/success");
+  };
+
+  const { mutate: createUser } = useCreateUser(onSuccess);
+  const router = useRouter();
 
   const { control, handleSubmit, watch, setValue } = useForm<IUser>({
     resolver: yupResolver(schema),
@@ -49,15 +55,11 @@ export default function DetailsForm() {
   async function sumbitForm() {
     handleSubmit(
       (values) => {
-        createUser(values, {
-          onSuccess,
-        });
+        createUser(values);
       },
       (errors) => console.error("Invalid data", errors)
     )();
   }
-
-  const onSuccess = () => {};
 
   return (
     <DetailsFormWrapper>

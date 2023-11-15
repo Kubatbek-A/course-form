@@ -1,8 +1,9 @@
 import DetailsForm from "@/components/DetailsForm/DetailsForm";
 import Header from "@/components/Header/Header";
 import Info from "@/components/Info/Info";
-import { colors } from "@/helpers/styles/globalStyles";
 import styled from "styled-components";
+import { Alert } from "reactstrap";
+import useToasts from "@/hooks/useToasts";
 
 const Page = styled.div`
   width: 100vw;
@@ -38,6 +39,8 @@ const Wrapper = styled.div`
 `;
 
 export default function HomePage() {
+  const { toasts, removeToast } = useToasts();
+
   return (
     <Page>
       <Container>
@@ -47,6 +50,16 @@ export default function HomePage() {
           <Info />
         </Wrapper>
       </Container>
+      {toasts.map((toast) => (
+        <Alert
+          key={toast.id}
+          color={toast.type}
+          isOpen={true}
+          toggle={() => removeToast(toast.id)}
+        >
+          {toast.message}
+        </Alert>
+      ))}
     </Page>
   );
 }
